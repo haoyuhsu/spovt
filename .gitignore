@@ -1,0 +1,8 @@
+ckpts/
+data/
+models/
+records/
+seg_image/
+visualize/
+
+*cpython

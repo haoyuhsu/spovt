@@ -1,0 +1,4 @@
+python ./main.py -record records/car_pretrain.txt -info "car pretrain" -bs 64 -lr 1e-3 -epoch 200  -interval 500  -cuda 0   -save ckpts/car_pretrain.pth -mode pretrain -cat car 
+python ./main.py -record records/car_train.txt -info "car train" -bs 64 -lr 1e-4 -epoch 200  -interval 500  -cuda 0   -save ckpts/car_train.pth -mode train -cat car -load ckpts/car_pretrain.pth
+python ./main.py -record records/car_refine.txt -info "car refine" -bs 64 -lr 1e-4 -epoch 200  -interval 500  -cuda 0   -save ckpts/car_refine.pth -mode refine -cat car -load ckpts/car_train.pth
+python ./main.py -record records/car_refine2.txt -info "car refine2" -bs 64 -lr 1e-4 -epoch 200  -interval 500  -cuda 0   -save ckpts/car_refine2.pth -mode refine2 -cat car -load ckpts/car_refine.pth
