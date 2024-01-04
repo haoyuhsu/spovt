@@ -1,68 +1,92 @@
-# SPOVT
-This is the official repo for PyTorch implementation of paper "NeurMips: Neural Mixture of Planar Experts for View Synthesis", CVPR 2022. 
-### [Paper](https://arxiv.org/abs/2204.13696) | [Project page](https://zhihao-lin.github.io/neurmips/) | [Video](https://youtu.be/PV1dCTWL5Oo)
+# SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion
+
+This is the official repo for PyTorch implementation of paper "SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion", NeurIPS 2022. 
+
+### [Paper](https://proceedings.neurips.cc/paper_files/paper/2022/hash/db6caae0f83e45e454e2215f07e7c5af-Abstract-Conference.html) | [Project page](https://haoyuhsu.github.io/spovt/) | [Video](https://haoyuhsu.github.io/spovt/)
+
 ![Overview](doc/overview.png)
 
 ## 🌱 Prerequisites
-- OS: Ubuntu 20.04.4 LTS
-- GPU: NVIDIA TITAN RTX
+- OS: Linux Ubuntu 20.04
+- GPU: NVIDIA RTX A6000 or NVIDIA RTX 3090
+- Python: 3.8.13
+- CUDA Toolkit: 11.6
+- GCC/G++: 7.2.0
 - Python package manager `conda`
-## 🌱 Setup
-### Datasets 
-Download and put datasets under folder `data/` by running:
-```bash
-bash run/dataset.sh
-```
-For more details of file structure and camera convention, please refer to [Dataset](doc/dataset.md). 
-### Environment
-Install all python packages for training and evaluation with conda environment setup file: 
-```bash
-conda env create -f environment.yml
-conda activate neurmips
-```
-### CUDA extension installation
-Compile the extension directly by running:
-```bash
-cd cuda/
-python setup.py develop
-```
-Note that if you need to modify this CUDA code, simply compile again after your modification.
 
-### Pretrained models (optional)
-Download pretrained model weights for evaluation without training from scratch:
+## 🌱 Setup
+
+### Datasets 
+
+Download datasets from [here](https://drive.google.com/file/d/1l-XmkpYdJMzDyjs0mfzQKBImJ2K2NnTO/view?usp=sharing) and put datasets under fold1er `data/`.
+
+### Environment
+
+Install all python packages for training and evaluation with conda environment by following commands: 
 ```bash
-bash run/checkpoints.sh
+conda create -n spovt python=3.8
+conda activate spovt
+conda install pytorch=1.13.0 torchvision pytorch-cuda=11.6 -c pytorch -c nvidia
+conda install -c fvcore -c iopath -c conda-forge fvcore iopath
+pip install "git+https://github.com/facebookresearch/pytorch3d.git"
+pip install -r requirements.txt
 ```
+
+### Pretrained checkpoints (optional)
+
+Download pretrained model weights from [here](https://drive.google.com/file/d/1qzGVRT_vj_D7jJOVNap4iSnXZ3f-txwI/view?usp=sharing) for evaluation without training from scratch. Put checkpoint files under folder `ckpts/`.
+
 ## 🌱 Usage 
-We provide hyperparameters for each experiment in config file `configs/*.yaml`, which is used for training and evaluation. For example, `replica-kitchen.yaml` corresponds to *Replica* dataset *Kitchen* scene, and `tat-barn.yaml` corresponds to *Tanks&Temple* dataset *Barn* scene.
+
+We provide training commands for only `car` experiment in the script file `train_car.sh`, and evaluation commands for all experiment in the script file `test.sh`. 
+
+Please note that the pretrained checkpoints have undergone extensive training, so it may require more epochs to achieve the performance reported in the paper.
 
 ### Training 
-Train the teacher and experts model by running:
+Train the model on `car` category by running:
 ```bash
-bash run/train.sh [config]
-# example: bash run/train.sh replica-kitchen
+bash train_car.sh
 ```
-### Evaluation
-Render testing images and evaluate metrics (i.e. PSNR, SSIM, LPIPS) by running:
+The model is trained progressively in 4 stages.
 ```bash
-bash run/eval.sh [config]
-# example: bash run/eval.sh replica-kitchen
-```
-The rendered images are put under folder `output_images/[config]/experts/color/valid/`
-### CUDA Acceleration
-To render testing images with optimized CUDA code by running:
-```bash
-bash run/eval_fast.sh [config]
-# example: bash run/eval_fast.sh replica-kitchen
-```
-The rendered images are put under folder `output_images/[config]/experts_cuda/color/valid/`
+# Reconstruction Training (autoencoder)
+python ./main.py -record records/car_pretrain.txt -info "car pretrain" -bs 64 -lr 1e-3 -epoch 200 -interval 500 -cuda 0 -save ckpts/car_pretrain.pth -mode pretrain -cat car 
 
-BibTex
+# Coarse Completion Training
+python ./main.py -record records/car_train.txt -info "car train" -bs 64 -lr 1e-4 -epoch 200 -interval 500 -cuda 0 -save ckpts/car_train.pth -mode train -cat car -load ckpts/car_pretrain.pth
+
+# Fine Completion Training (Stage 1)
+python ./main.py -record records/car_refine.txt -info "car refine" -bs 64 -lr 1e-4 -epoch 200 -interval 500 -cuda 0 -save ckpts/car_refine.pth -mode refine -cat car -load ckpts/car_train.pth
+
+# Fine Completion Training (Stage 2)
+python ./main.py -record records/car_refine2.txt -info "car refine2" -bs 64 -lr 1e-4 -epoch 200 -interval 500  -cuda 0 -save ckpts/car_refine2.pth -mode refine2 -cat car -load ckpts/car_refine.pth
 ```
-@inproceedings{lin2022neurmips,
-  title={NeurMiPs: Neural Mixture of Planar Experts for View Synthesis},
-  author = {Lin, Zhi-Hao and Ma, Wei-Chiu and Hsu, Hao-Yu and Wang, Yu-Chiang Frank and Wang, Shenlong},
-  year={2022},
-  booktitle={CVPR},
+
+### Evaluation
+
+Generate complete point cloud and render segmented images by running:
+```bash
+bash test.sh
+```
+The rendered images are saved under folder `seg_image`, and the generated point cloud are saved under folder `visualize`. Note that the evaluation metrics (e.g., mIoU, chamfer distance) are also calculated during evaluation.
+
+## Qualitative Results
+
+Visualizations of our complete point cloud and its reconstructed meshes are shown below. Please note that in our point cloud visualization, each color represents a specific part label within a category. For example, in the `airplane` category, red indicates the plane body, green for the wings, and yellow for the engine.
+
+| Category | Partial Point Cloud | Complete Point Cloud (Ours) | Reconstructed Meshes |
+|:--------:|:-------------------:|:---------------------------:|:--------------------:|
+| `airplane` | ![airplane_partial](doc/gifs/airplane_partial_14.gif) | ![airplane_complete](doc/gifs/airplane_pred_14.gif) | ![airplane_meshes](doc/gifs/airplane_ours_14.gif) |
+| `car` | ![car_partial](doc/gifs/car_partial_1.gif) | ![car_complete](doc/gifs/car_pred_1.gif) | ![car_meshes](doc/gifs/car_ours_1.gif) |
+| `chair` | ![chair_partial](doc/gifs/chair_partial_16.gif) | ![chair_complete](doc/gifs/chair_pred_16.gif) | ![chair_meshes](doc/gifs/chair_ours_16.gif) |
+| `table` | ![table_partial](doc/gifs/table_partial_15.gif) | ![table_complete](doc/gifs/table_pred_15.gif) | ![table_meshes](doc/gifs/table_ours_15.gif) |
+
+## BibTex
+```
+@inproceedings{huang2022spovt,
+  title = {SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion},
+	author = {Huang, Sheng Yu and Hsu, Hao-Yu and Wang, Frank},
+	booktitle = {Advances in Neural Information Processing Systems},
+  year = {2022},
 }
 ```
