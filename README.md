@@ -18,7 +18,7 @@ This is the official repo for PyTorch implementation of paper "SPoVT: Semantic-P
 
 ### Datasets 
 
-Download datasets from [here](https://drive.google.com/file/d/1l-XmkpYdJMzDyjs0mfzQKBImJ2K2NnTO/view?usp=sharing) and put datasets under fold1er `data/`.
+Download datasets from [here](https://drive.google.com/file/d/1l-XmkpYdJMzDyjs0mfzQKBImJ2K2NnTO/view?usp=sharing) and put datasets under folder `data/`.
 
 ### Environment
 
@@ -87,6 +87,7 @@ Visualizations of our complete point cloud and its reconstructed meshes are show
   title = {SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion},
 	author = {Huang, Sheng Yu and Hsu, Hao-Yu and Wang, Frank},
 	booktitle = {Advances in Neural Information Processing Systems},
-  year = {2022},
+	pages = {33934--33946},
+	year = {2022},
 }
 ```
