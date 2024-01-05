@@ -429,7 +429,7 @@ class Manager():
                     partial_seg_all[cnt:cnt+bs, j*256:(j+1)*256] = partial_seg[:,max_token-2:]
 
                     ##### dense output part #####
-                    point_fragment, seg_fragment, pred_ratio, _, _, _ = self.model(partial_point, partial_token, partial_seg, partial_src_mask, gt_seg, pretrain = False, mode = 'test',inference=False, self_recon=False,input_ratio = partial_part_ratio, gt_ratio = gt_part_ratio, n = n)
+                    point_fragment, seg_fragment, pred_ratio, _, _, _ = self.model(partial_point, partial_token, partial_seg, partial_src_mask, gt_seg, pretrain = False, mode = 'test',inference=True, self_recon=False,input_ratio = partial_part_ratio, gt_ratio = gt_part_ratio, n = n)
                     point_fragment, seg_fragment, pred_ratio = point_fragment.detach(), seg_fragment.detach(), pred_ratio.detach()
                     ratio_all[cnt:cnt+bs] += pred_ratio
                     point[cnt:cnt+bs,j*512:(j+1)*512,:] = point_fragment[:,:]
