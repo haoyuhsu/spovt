@@ -2,7 +2,7 @@
 
 This is the official repo for PyTorch implementation of paper "SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion", NeurIPS 2022. 
 
-### [Paper](https://proceedings.neurips.cc/paper_files/paper/2022/hash/db6caae0f83e45e454e2215f07e7c5af-Abstract-Conference.html) | [Project page](https://haoyuhsu.github.io/spovt/) | [Video](https://haoyuhsu.github.io/spovt/)
+### [Paper](https://proceedings.neurips.cc/paper_files/paper/2022/hash/db6caae0f83e45e454e2215f07e7c5af-Abstract-Conference.html) | [Project page](https://haoyuhsu.github.io/spovt/) | [Video](https://slideslive.com/embed/presentation/38992362)
 
 <!-- ![Overview](doc/overview.png) -->
 
