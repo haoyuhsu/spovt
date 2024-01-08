@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M6RQJ0R3XQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-M6RQJ0R3XQ');
+    </script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,500,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./assets/css/Highlight-Clean.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png"> -->
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png"> -->
+    <!-- <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png"> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/chair-mesh-crop.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/chair-mesh-crop.png">
+    <link rel="manifest" href="./site.webmanifest">
+
+    <meta property="og:site_name" content="SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion" />
+    <meta property="og:type" content="video.other" />
+    <meta property="og:title" content="SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion" />
+    <meta property="og:description" content="SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion, 2022." />
+    <meta property="og:url" content="https://SPoVT.github.io/" />
+    <meta property="og:image" content="https://SPoVT.github.io/assets/images/dreamfusion_samples.png" />
+
+    <meta property="article:publisher" content="https://SPoVT.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion" />
+    <meta name="twitter:description" content="We use diffusion models to generate SDF for 3D shape synthesis." />
+    <meta name="twitter:url" content="https://SPoVT.github.io/" />
+    <meta name="twitter:image" content="https://SPoVT.github.io/assets/images/dreamfusion_samples.png" />
+    <!-- <meta name="twitter:site" content="" /> -->
+
+    <script src="./assets/js/video_comparison.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer@2.0.1/dist/model-viewer.min.js"></script>
+</head>
+
+<body>
+    <!-- <div class="banner">
+      <video class="video lazy"
+          poster="https://dreamfusion-cdn.ajayj.com/sept28/banner_1x6_customhue_A.jpg"
+          autoplay loop playsinline muted>
+        <source data-src="https://dreamfusion-cdn.ajayj.com/sept28/banner_1x6_customhue_A.mp4" type="video/mp4"></source>
+      </video>
+    </div> -->
+
+    <div class="highlight-clean" style="padding-bottom: 10px;">
+        <!-- <div class="container" style="max-width: 768px;"> -->
+        <div class="container" style="max-width: 768px;">
+            <h1 class="text-center"><b>SPoVT</b>: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion</h1>
+        </div>
+
+        <div class="container" style="max-width: 768px; position: relative; left: 90px;">
+            <div class="row authors">
+                <div class="col-sm-3">
+                    <h5 class="text-center"><a class="text-center" href="https://github.com/peterjohnsonhuang?fbclid=IwAR10fFReL8OrdhzELdTFDwMlYVASbBGkoejOZePV2iPAg2_Hgimd6q52NGQ">Sheng-Yu Huang*</a></h5>
+                    <h6 class="text-center">NTU</h6>
+                </div>
+                <div class="col-sm-3">
+                    <h5 class="text-center"><a href="https://haoyuhsu.github.io/">Hao-Yu Hsu*</a></h5>
+                    <h6 class="text-center">NTU</h6>
+                </div>
+                <div class="col-sm-3">
+                    <h5 class="text-center"><a class="text-center" href="http://vllab.ee.ntu.edu.tw/ycwang.html">Frank Wang</a></h5>
+                    <h6 class="text-center">NTU</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="container" style="max-width: 768px; position: relative; left: 180px;">
+          <div class="row authors">
+              <div class="col-sm-3">
+                <h5 class="text-center"><a class="text-center" href="https://www.alexander-schwing.de/">Alex Schwing*</a></h5>
+                <h6 class="text-center">UIUC</h6>
+              </div>
+              <div class="col-sm-3">
+                <h5 class="text-center"><a class="text-center" href="https://cs.illinois.edu/about/people/faculty/lgui">Liangyan Gui*</a></h5>
+                <h6 class="text-center">UIUC</h6>
+              </div>
+          </div>
+        </div> -->
+
+        <div class="container" style="max-width: 768px;">
+          <h4 class="text-center">NeurIPS 2022</h4>
+        </div>
+
+        <div class="buttons" style="margin-bottom: 8px;">
+            <a class="btn btn-light" role="button" href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/db6caae0f83e45e454e2215f07e7c5af-Abstract-Conference.html">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>
+                </svg>
+                Paper
+            </a>
+            <a class="btn btn-light" role="button" href="https://github.com/haoyuhsu/spovt">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                Code
+            </a>
+            <a class="btn btn-light" role="button" href="index.html">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" width="24px" height="24px" viewBox="0 0 375 531">
+                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "/>
+                </svg>
+                Video
+            </a>
+        </div>
+    </div>
+    <!-- <hr class="divider" /> -->
+
+    <div class="container" style="max-width: 768px;">
+        <div class="row captioned_videos">
+            <div class="col-md-12">
+              <!-- <h2>SDFusion - Overview</h2> -->
+                <!-- Large format devices -->
+                <!-- <video class="video lazy d-none d-xs-none d-sm-block" autoplay loop playsinline muted poster="https://dreamfusion-cdn.ajayj.com/sept28/wipe_opposite_6x4_smoothstep.jpg">
+                    <source data-src="https://dreamfusion-cdn.ajayj.com/sept28/wipe_opposite_6x4_smoothstep.mp4" type="video/mp4"></source>
+                </video> -->
+                <!-- Small format devices -->
+                <!-- <video class="video lazy d-xs-block d-sm-none" autoplay loop playsinline muted poster="https://dreamfusion-cdn.ajayj.com/sept28/shaded_3x3_smoothstep.jpg">
+                    <source data-src="https://dreamfusion-cdn.ajayj.com/sept28/shaded_3x3_smoothstep.mp4" type="video/mp4"></source>
+                </video> -->
+
+                <!-- <video class="video lazy"
+                  poster="./assets/1-teaser-v3-out-1.png"
+                  autoplay loop playsinline muted>
+                  <source data-src="./assets/teaser-vid.mp4" type="video/mp4"></source>
+                </video> -->
+
+                <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+                <!-- <video autoplay loop muted playsinline width="0%"> -->
+                  <!-- <source src="./assets/teaser-vid-v1.mp4" type="video/mp4"> -->
+                  <source src="./assets/0-teasor.mp4" type="video/mp4">
+                </video>
+
+                <!-- <h6 class="caption" style="text-align: center;"> SDFusion is a diffusion-based 3D shape generator. It enables various applications.
+                  (top-left) SDFusion can generate 3D shapes conditioned on different input modalities, including partial shapes, images, and text. 
+                  (bottom-left) SDFusion can even jointly handle multiple conditioning modalities while controlling the strength for each of them.
+                  (top-right) We showcase an application where we leverage pretrained 2D models to texture 3D shapes generated by SDFusion. (bottom-right) 
+                  We use a 3D-printer to print out the generated shapes of SDFusion.
+                </h6> -->
+
+                <h6 class="caption" style="text-align: center;"> SPoVT is a Transformer-based network for semantic point cloud completion. 
+                  By taking partial point cloud and their semantic part labels as the inputs, our SPoVT is able to derive point cloud features 
+                  and the associated semantic prototypes for each part. The semantic VAE scheme of SPoVT allows resampling of point features from 
+                  each semantic prototype for completion, manipulation and detailed mesh reconstruction.
+                </h6>
+            </div>
+        </div>
+    </div>
+
+    <!-- <br> -->
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Abstract</h2>
+              <p>
+                <!-- <strong> -->
+                Point cloud completion is an active research topic for 3D vision and has been widely studied in recent years. Instead of directly predicting the missing point cloud from the partial input, we introduce a Semantic-Prototype Variational Transformer (SPoVT) in this work, which takes both partial point cloud and their semantic labels as the inputs for semantic point cloud object completion. By observing and attending to geometry and semantic information as input features, our SPoVT would derive point cloud features and their semantic prototypes for completion purposes. As a result, our SPoVT not only performs point cloud completion with varying resolution, it also allows manipulation of different semantic parts of an object. Experiments on benchmark datasets would quantitatively and qualitatively verify the effectiveness and practicality of our proposed model.                  <!-- </strong> -->
+              </p>
+          </div>
+      </div>
+  </div>
+
+    <!-- <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+        <div class="col-md-12">
+            <h2>3D print</h2>
+        </div>
+      </div>
+
+      <video autoplay loop muted playsinline width="20%">
+        <source src="./assets/3d_print.mp4" type="video/mp4">
+      </video>
+    </div> -->
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Point Cloud Semantic Completion</h2>
+              <!-- TODO: change samples!!! -->
+          </div>
+      </div>
+
+      <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+        <source src="./assets/1-all-pcd.mp4" type="video/mp4">
+      </video>
+
+
+      <div class="container" style="max-width: 768px; position: relative; left: 0px;">
+        <div class="row legends">
+        <!-- <div class="row authors"> -->
+          <h6 class="text-left" style="position: relative; left: 18%;">Input</h6>
+          <h6 class="text-left" style="position: relative; left: 24%;">Ours</h6>
+          <h6 class="text-left" style="position: relative; left: 32%;">GT</h6>
+          <h6 class="text-left" style="position: relative; left: 39%;">Input</h6>
+          <h6 class="text-left" style="position: relative; left: 46%;">Ours</h6>
+          <h6 class="text-left" style="position: relative; left: 53%;">GT</h6>
+        </div>
+      </div>
+
+      <p> Given partial point cloud and their semantic labels, SPoVT can perform point cloud semantic completion. Each color in the point cloud indicates a distinct semantic part. </p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Meshes Reconstruction</h2>
+          </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-md-12">
+          <h3 style="text-align: center;">Airplane</h3>
+        </div>
+      </div> -->
+
+      <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+        <source src="./assets/2-airplane-meshes.mp4" type="video/mp4">
+      </video>
+
+      <div class="container" style="max-width: 768px; position: relative; left: 0px;">
+        <div class="row legends">
+        <!-- <div class="row authors"> -->
+          <h6 class="text-left" style="position: relative; left: 4%;">VRCNet (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 11%;">PoinTr (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 18%;">Ours (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 26%;">Ours (300k)</h6>
+          <h6 class="text-left" style="position: relative; left: 34%;">GT (16k)</h6>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-md-12">
+          <h3 style="text-align: center;">Car</h3>
+        </div>
+      </div> -->
+
+      <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+        <source src="./assets/3-car-meshes.mp4" type="video/mp4">
+      </video>
+
+      <div class="container" style="max-width: 768px; position: relative; left: 0px;">
+        <div class="row legends">
+        <!-- <div class="row authors"> -->
+          <h6 class="text-left" style="position: relative; left: 4%;">VRCNet (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 11%;">PoinTr (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 18%;">Ours (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 26%;">Ours (300k)</h6>
+          <h6 class="text-left" style="position: relative; left: 34%;">GT (16k)</h6>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-md-12">
+          <h3 style="text-align: center;">Chair</h3>
+        </div>
+      </div> -->
+
+      <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+        <source src="./assets/4-chair-meshes.mp4" type="video/mp4">
+      </video>
+
+      <div class="container" style="max-width: 768px; position: relative; left: 0px;">
+        <div class="row legends">
+        <!-- <div class="row authors"> -->
+          <h6 class="text-left" style="position: relative; left: 4%;">VRCNet (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 11%;">PoinTr (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 18%;">Ours (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 26%;">Ours (300k)</h6>
+          <h6 class="text-left" style="position: relative; left: 34%;">GT (16k)</h6>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-md-12">
+            <h3 style="text-align: center;">Table</h3>
+        </div>
+      </div> -->
+
+      <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+        <source src="./assets/5-table-meshes.mp4" type="video/mp4">
+      </video>
+
+      <div class="container" style="max-width: 768px; position: relative; left: 0px;">
+        <div class="row legends">
+        <!-- <div class="row authors"> -->
+          <h6 class="text-left" style="position: relative; left: 4%;">VRCNet (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 11%;">PoinTr (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 18%;">Ours (16k)</h6>
+          <h6 class="text-left" style="position: relative; left: 26%;">Ours (300k)</h6>
+          <h6 class="text-left" style="position: relative; left: 34%;">GT (16k)</h6>
+        </div>
+      </div>
+
+      <p> The variational inference property of SPoVT allows for repeated sampling from captured semantic prototypes during the completion process. This approach further improves the fidelity of reconstructed meshes derived from a complete point cloud. </p>
+
+    </div>
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Semantic Prototypes Interpolation</h2>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+            <h3>
+              Instance-level Interpolation
+            </h3>
+            <br>
+              <img src="./assets/6-instance-level-interpolation.png" style="max-width: 768px;">
+            <br>
+            <br>
+            <p> SPoVT is capable of achieving latent interpolation of the entire set of semantic prototypes between two point clouds. </p>
+            <br>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+            <h3>
+              Part-level Interpolation
+            </h3>
+            <br>
+              <img src="./assets/7-part-level-interpolation.png" style="max-width: 768px;">
+            <br>
+            <br>
+            <p> SPoVT is capable of achieving latent interpolation of one semantic prototype between two point clouds. </p>
+            <br>
+        </div>
+      </div>
+
+      <!-- <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+        <source src="./assets/2-proj-txt-guide-shape-comp-out.mp4" type="video/mp4">
+      </video>
+
+      <p> Given a partial shape, SDFusion use the text inputs to guide the shape completion process. </p> -->
+
+      <!-- <div class="row">
+        <div class="col-img_guide_shape_comp">
+          <div class="img_guide_shape_comp" style="position: relative; left: 0px;">
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_SIGURD-C-top-I-chair-IKEA_PATRIK-img_view-2756-L-with square back/-1-txtW-0.0-imgW-1.0-chair-IKEA_PATRIK-img_view-2756-txt-with square back-1-gt-part.gif"> </div>
+            <div class="txt_input"> <h5> + </h5> </div>
+            <div class="img-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_SIGURD-C-top-I-chair-IKEA_PATRIK-img_view-2756-L-with square back/-1-txtW-0.0-imgW-1.0-chair-IKEA_PATRIK-img_view-2756-txt-with square back-0-img.png"> </div>
+            <div class="txt_input"> <h5> &#10230 </h5> </div>
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_SIGURD-C-top-I-chair-IKEA_PATRIK-img_view-2756-L-with square back/-1-txtW-0.0-imgW-1.0-chair-IKEA_PATRIK-img_view-2756-txt-with square back-2-gen-0-trial_0.gif"> </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-img_guide_shape_comp">
+          <div class="img_guide_shape_comp" style="position: relative; left: 0px;">
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-SS_004-img_view-0141/-1-txtW-0.0-imgW-1.0-chair-SS_004-img_view-0141-txt-with square back-1-gt-part.gif"> </div>
+            <div class="txt_input"> <h5> + </h5> </div>
+            <div class="img-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-SS_004-img_view-0141/-1-txtW-0.0-imgW-1.0-chair-SS_004-img_view-0141-txt-with square back-0-img.png"> </div>
+            <div class="txt_input"> <h5> &#10230 </h5> </div>
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-SS_004-img_view-0141/-1-txtW-0.0-imgW-1.0-chair-SS_004-img_view-0141-txt-with square back-2-gen-2-trial_0.gif"> </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-img_guide_shape_comp">
+          <div class="img_guide_shape_comp" style="position: relative; left: 0px;">
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-IKEA_KLAPPSTA_1-img_view-2456/-1-txtW-0.0-imgW-1.0-chair-IKEA_KLAPPSTA_1-img_view-2456-txt-with square back-1-gt-part.gif"> </div>
+            <div class="txt_input"> <h5> + </h5> </div>
+            <div class="img-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-IKEA_KLAPPSTA_1-img_view-2456/-1-txtW-0.0-imgW-1.0-chair-IKEA_KLAPPSTA_1-img_view-2456-txt-with square back-0-img.png"> </div>
+            <div class="txt_input"> <h5> &#10230 </h5> </div>
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-IKEA_KLAPPSTA_1-img_view-2456/-1-txtW-0.0-imgW-1.0-chair-IKEA_KLAPPSTA_1-img_view-2456-txt-with square back-2-gen-0-trial_0.gif"> </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-img_guide_shape_comp">
+          <div class="img_guide_shape_comp" style="position: relative; left: 0px;">
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-SS_001-img_view-0130-L-chair without arms/-1-txtW-0.0-imgW-1.0-chair-SS_001-img_view-0130-txt-chair without arms-1-gt-part.gif"> </div>
+            <div class="txt_input"> <h5> + </h5> </div>
+            <div class="img-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-SS_001-img_view-0130-L-chair without arms/-1-txtW-0.0-imgW-1.0-chair-SS_001-img_view-0130-txt-chair without arms-0-img.png"> </div>
+            <div class="txt_input"> <h5> &#10230 </h5> </div>
+            <div class="gif-container"> <img src="./assets/6-cond-guidance-img/S-chair-IKEA_FUSION-C-bottom-I-chair-SS_001-img_view-0130-L-chair without arms/-1-txtW-0.0-imgW-1.0-chair-SS_001-img_view-0130-txt-chair without arms-2-gen-0-trial_0.gif"> </div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <video autoplay loop muted playsinline width="60%" style="display: block; margin: auto">
+        <source src="./assets/3-proj-img-guide-shape-comp-out.mp4" type="video/mp4">
+      </video>
+
+    <p> Given a partial shape, SDFusion use an image as guidance as well for shape completion. </p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Single-view Reconstruction</h2>
+          </div>
+      </div>
+
+      <video autoplay loop muted playsinline width="100%" style="display: block; margin: auto">
+        <source src="./assets/4-proj-img2shape-out.mp4" type="video/mp4">
+      </video> -->
+
+      <!-- <div class="row">
+        <div class="col-img2shape-comp">
+          <div class="img-container-gtimg"> <img src="./assets/4-img2shape-comp/3-chair+SS_059+voxel-0480-1-img-gt.png"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/3-chair+SS_059+voxel-0480-1-gt-vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/3-chair+SS_059+voxel-0480-2-df-vox-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/3-chair+SS_059+voxel-0480-2-gen-vox-rand_tf-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/3-chair+SS_059+voxel-0480-2-gen-vox-resnet2vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/3-chair+SS_059+voxel-0480-2-gen-vox-resnet2sdf-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/3-chair+SS_059+voxel-0480-2-gen-vox-pix2vox.gif"> </div>
+        </div>
+      </div>
+  
+      <div class="row">
+          <div class="col-img2shape-comp">
+            <div class="img-container-gtimg"> <img src="./assets/4-img2shape-comp/17-chair+SS_103+voxel-0845-1-img-gt.png"> </div>
+            <div class="img-container"> <img src="./assets/4-img2shape-comp/17-chair+SS_103+voxel-0845-1-gt-vox.gif"> </div>
+            <div class="img-container"> <img src="./assets/4-img2shape-comp/17-chair+SS_103+voxel-0845-2-df-vox-0.gif"> </div>
+            <div class="img-container"> <img src="./assets/4-img2shape-comp/17-chair+SS_103+voxel-0845-2-gen-vox-rand_tf-2.gif"> </div>
+            <div class="img-container"> <img src="./assets/4-img2shape-comp/17-chair+SS_103+voxel-0845-2-gen-vox-resnet2vox.gif"> </div>
+            <div class="img-container"> <img src="./assets/4-img2shape-comp/17-chair+SS_103+voxel-0845-2-gen-vox-resnet2sdf-0.gif"> </div>
+            <div class="img-container"> <img src="./assets/4-img2shape-comp/17-chair+SS_103+voxel-0845-2-gen-vox-pix2vox.gif"> </div>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col-img2shape-comp" >
+          <div class="img-container-gtimg"> <img src="./assets/4-img2shape-comp/22-chair+SS_033+voxel-0355-1-img-gt.png"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/22-chair+SS_033+voxel-0355-1-gt-vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/22-chair+SS_033+voxel-0355-2-df-vox-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/22-chair+SS_033+voxel-0355-2-gen-vox-rand_tf-1.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/22-chair+SS_033+voxel-0355-2-gen-vox-resnet2vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/22-chair+SS_033+voxel-0355-2-gen-vox-resnet2sdf.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/22-chair+SS_033+voxel-0355-2-gen-vox-pix2vox.gif"> </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-img2shape-comp" >
+          <div class="img-container-gtimg"> <img src="./assets/4-img2shape-comp/31-bed+IKEA_HEMNES_2+voxel-0356-1-img-gt.png"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/31-bed+IKEA_HEMNES_2+voxel-0356-1-gt-vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/31-bed+IKEA_HEMNES_2+voxel-0356-2-df-vox-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/31-bed+IKEA_HEMNES_2+voxel-0356-2-gen-vox-rand_tf-1.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/31-bed+IKEA_HEMNES_2+voxel-0356-2-gen-vox-resnet2vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/31-bed+IKEA_HEMNES_2+voxel-0356-2-gen-vox-resnet2sdf-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/31-bed+IKEA_HEMNES_2+voxel-0356-2-gen-vox-pix2vox.gif"> </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-img2shape-comp" >
+          <div class="img-container-gtimg"> <img src="./assets/4-img2shape-comp/65-desk+IKEA_MICKE_2+voxel-0536-1-img-gt.png"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/65-desk+IKEA_MICKE_2+voxel-0536-1-gt-vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/65-desk+IKEA_MICKE_2+voxel-0536-2-df-vox-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/65-desk+IKEA_MICKE_2+voxel-0536-2-gen-vox-rand_tf-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/65-desk+IKEA_MICKE_2+voxel-0536-2-gen-vox-resnet2vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/65-desk+IKEA_MICKE_2+voxel-0536-2-gen-vox-resnet2sdf-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/65-desk+IKEA_MICKE_2+voxel-0536-2-gen-vox-pix2vox.gif"> </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-img2shape-comp" >
+          <div class="img-container-gtimg"> <img src="./assets/4-img2shape-comp/77-sofa+IKEA_SOLSTA_d053e745b565fa391c1b3b2ed8d13bf8+voxel-1702-1-img-gt.png"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/77-sofa+IKEA_SOLSTA_d053e745b565fa391c1b3b2ed8d13bf8+voxel-1702-1-gt-vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/77-sofa+IKEA_SOLSTA_d053e745b565fa391c1b3b2ed8d13bf8+voxel-1702-2-df-vox-0.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/77-sofa+IKEA_SOLSTA_d053e745b565fa391c1b3b2ed8d13bf8+voxel-1702-2-gen-vox-rand_tf-2.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/77-sofa+IKEA_SOLSTA_d053e745b565fa391c1b3b2ed8d13bf8+voxel-1702-2-gen-vox-resnet2vox.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/77-sofa+IKEA_SOLSTA_d053e745b565fa391c1b3b2ed8d13bf8+voxel-1702-2-gen-vox-resnet2sdf.gif"> </div>
+          <div class="img-container"> <img src="./assets/4-img2shape-comp/77-sofa+IKEA_SOLSTA_d053e745b565fa391c1b3b2ed8d13bf8+voxel-1702-2-gen-vox-pix2vox.gif"> </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="container" style="max-width: 768px; position: relative; left: 0px;"> -->
+        <!-- <div class="row legends"> -->
+        <!-- <div class="row authors"> -->
+          <!-- <h6 class="text-left" style="position: relative; left: 2%;">Input</h6>
+          <h6 class="text-left" style="position: relative; left: 11%;">GT</h6>
+          <h6 class="text-left" style="position: relative; left: 21%;">Ours</h6>
+          <h6 class="text-left" style="position: relative; left: 27%;">AutoSDF</h6>
+          <h6 class="text-left" style="position: relative; left: 30%;">ResNet2Vox</h6>
+          <h6 class="text-left" style="position: relative; left: 31%;">ResNet2SDF</h6>
+          <h6 class="text-left" style="position: relative; left: 33%;">Pix2Vox</h6> -->
+          <!-- <h6 class="text-left" style="position: relative; left: 4.5%;">Input</h6>
+          <h6 class="text-left" style="position: relative; left: 14%;">GT</h6>
+          <h6 class="text-left" style="position: relative; left: 24%;">Ours</h6>
+          <h6 class="text-left" style="position: relative; left: 32%;">AutoSDF</h6>
+          <h6 class="text-left" style="position: relative; left: 35%;">ResNet2Vox</h6>
+          <h6 class="text-left" style="position: relative; left: 36.5%;">ResNet2SDF</h6>
+          <h6 class="text-left" style="position: relative; left: 40%;">Pix2Vox</h6>
+        </div>
+      </div> -->
+
+    <!-- <p> The results of single-view reconstruction and the comparisons with the baselines. </p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Multi-condition: controlling the conditional strength between image and text</h2>
+          </div>
+
+          <video autoplay loop muted playsinline width="60%" style="display: block; margin: auto">
+            <source src="./assets/poe-webpage-v1.mp4" type="video/mp4">
+          </video>
+
+          <p> Given a partial shape, SDFusion can condition on multiple conditional modalities, e.g., image and text. We can generate different results by adjusting the weights between image and text. </p>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Text-guided Colorization</h2>
+          </div>
+      </div>
+
+      <video autoplay loop muted playsinline width="80%" style="display: block; margin: auto">
+        <source src="./assets/6-proj-txt-colorization-out.mp4" type="video/mp4">
+      </video>
+
+      <p> Given a shape generated by SDFusion and a text description, we adopt an off-the-shelf 2D diffusion model (inspired from <a href="https://dreamfusion3d.github.io/">DreamFusion</a>) to perform texturization. </p>
+    </div>
+    
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Unconditional Generation</h2>
+          </div>
+      </div>
+
+      <video autoplay loop muted playsinline width="80%" style="display: block; margin: auto">
+        <source src="./assets/7-proj-uncond-bnet-out.mp4" type="video/mp4">
+      </video>
+
+      <br>
+      <p> We show the unconditional generation results from BuildingNet. </p>
+
+      <video autoplay loop muted playsinline width="80%" style="display: block; margin: auto">
+        <source src="./assets/7-proj-uncond-out.mp4" type="video/mp4">
+      </video>
+      
+      <br>
+      <p> We also demonstrate the unconditional generation results from ShapeNet. </p>
+    </div> -->
+
+    <!-- <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-sm-8">
+                <h2>Example generated objects</h2>
+                <p>SDFusion generates objects from partial shapes, images, and texts. <a href="./gallery.html">Search through hundreds of generated assets in our full gallery.</a></p>
+            </div>
+            <div class="col-sm-4 my-auto">
+                <a href="./gallery.html" class="btn btn-primary btn-lg btn-search"><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewbox="0 0 600 550">
+                    <path fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
+                    </svg>Search assets
+                </a>
+            </div>
+        </div>
+    </div> -->
+
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Overview of SPoVT</h2>
+                <br>
+                <img src="./assets/8-overview.png" style="max-width: 768px;">
+                <br> <br>
+                <p>(left) The encoder learns the point features for input point cloud and the prototypes of each semantic part. The 
+                  semantic VAE scheme is presented for capturing point cloud distribution of each semantic part given above features.
+                  An additional ratio predictor is introduced to predict point number distribution across semantic parts. (right) The 
+                  decoder samples point features for each semantic part with predicted point number distribution, then outputs the coarse
+                  point cloud. The refinement network is used to refine the coarse point cloud to the final point cloud.</p>
+                </p>
+                <br>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-12">
+                <video class="video lazy" controls muted poster="https://dreamfusion-cdn.ajayj.com/dreamfusion_overview.jpg">
+                    <source data-src="https://dreamfusion-cdn.ajayj.com/dreamfusion_overview.mp4" type="video/mp4"></source>
+                </video>
+            </div>
+        </div> -->
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Citation</h2>
+                <code>
+                    @inproceedings{huang2022spovt,<br>
+                      &nbsp; title = {SPoVT: Semantic-Prototype Variational Transformer for Dense Point Cloud Semantic Completion},<br>
+                      &nbsp; author = {Huang, Sheng Yu and Hsu, Hao-Yu and Wang, Frank},<br>
+                      &nbsp; booktitle = {Advances in Neural Information Processing Systems},<br>
+                      &nbsp; pages = {33934--33946},<br>
+                      &nbsp; year = {2022},<br>
+                }</code>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="container" style="max-width: 768px;">
+      <div class="row">
+          <div class="col-md-12">
+            <h2>Acknowledgement</h2>
+          </div>
+          <h6> This webpage is borrowed from <a href="https://dreamfusion3d.github.io/">DreamFusion</a> and <a href="https://yccyenchicheng.github.io/SDFusion/">SDFusion</a>. Thanks for their beautiful websites! </h6>
+      </div>
+    </div>
+
+    <script src="https://polyfill.io/v3/polyfill.js?features=IntersectionObserver"></script>
+    <script src="/assets/js/yall.js"></script>
+    <script>
+        yall(
+            {
+                observeChanges: true
+            }
+        );
+    </script>
+    <script src="/assets/js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/js/webflow.fd002feec.js"></script>
+    <!-- Import the component -->
+</body>
+
+</html>
