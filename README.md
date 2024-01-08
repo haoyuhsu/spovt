@@ -8,6 +8,7 @@ This is the official repo for PyTorch implementation of paper "SPoVT: Semantic-P
 
 ![Teasor](doc/teasor.gif)
 
+
 ## 🌱 Prerequisites
 - OS: Linux Ubuntu 20.04
 - GPU: NVIDIA RTX A6000 or NVIDIA RTX 3090
