@@ -5,6 +5,10 @@ This is the official repo for PyTorch implementation of paper "SPoVT: Semantic-P
 ### [Paper](https://proceedings.neurips.cc/paper_files/paper/2022/hash/db6caae0f83e45e454e2215f07e7c5af-Abstract-Conference.html) | [Project page](https://haoyuhsu.github.io/spovt/) | [Video](https://haoyuhsu.github.io/spovt/)
 
 ![Overview](doc/overview.png)
+![Teasor](doc/teasor.mp4)
+<video width="320" height="240" controls>
+  <source src="doc/teasor.mp4" type="video/mp4">
+</video>
 
 ## 🌱 Prerequisites
 - OS: Linux Ubuntu 20.04
