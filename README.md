@@ -94,3 +94,6 @@ Visualizations of our complete point cloud and its reconstructed meshes are show
 	year = {2022},
 }
 ```
+
+## Acknowledgement
+This work is supported in part by the Tron Future Tech Inc. and National Science and Technology Council via NSTC-110-2634-F-002-052. We also thank National Center for High-performance Computing (NCHC) for providing computational and storage resources.
