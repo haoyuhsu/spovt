@@ -76,10 +76,10 @@ Visualizations of our complete point cloud and its reconstructed meshes are show
 
 | Category | Partial Point Cloud | Complete Point Cloud (Ours) | Reconstructed Meshes |
 |:--------:|:-------------------:|:---------------------------:|:--------------------:|
-| `airplane` | ![airplane_partial](doc/gifs/airplane_partial_14.gif) | ![airplane_complete](doc/gifs/airplane_pred_14.gif) | ![airplane_meshes](doc/gifs/airplane_ours_14.gif) |
-| `car` | ![car_partial](doc/gifs/car_partial_1.gif) | ![car_complete](doc/gifs/car_pred_1.gif) | ![car_meshes](doc/gifs/car_ours_1.gif) |
-| `chair` | ![chair_partial](doc/gifs/chair_partial_16.gif) | ![chair_complete](doc/gifs/chair_pred_16.gif) | ![chair_meshes](doc/gifs/chair_ours_16.gif) |
-| `table` | ![table_partial](doc/gifs/table_partial_15.gif) | ![table_complete](doc/gifs/table_pred_15.gif) | ![table_meshes](doc/gifs/table_ours_15.gif) |
+| `airplane` | ![airplane_partial](doc/gifs/airplane_partial_14.gif) | ![airplane_complete](doc/gifs/airplane_pred_14.gif) | ![airplane_meshes](doc/gifs/airplane_ours_meshes_14.gif) |
+| `car` | ![car_partial](doc/gifs/car_partial_1.gif) | ![car_complete](doc/gifs/car_pred_1.gif) | ![car_meshes](doc/gifs/car_ours_meshes_1.gif) |
+| `chair` | ![chair_partial](doc/gifs/chair_partial_16.gif) | ![chair_complete](doc/gifs/chair_pred_16.gif) | ![chair_meshes](doc/gifs/chair_ours_meshes_16.gif) |
+| `table` | ![table_partial](doc/gifs/table_partial_15.gif) | ![table_complete](doc/gifs/table_pred_15.gif) | ![table_meshes](doc/gifs/table_ours_meshes_15.gif) |
 
 ## BibTex
 ```
