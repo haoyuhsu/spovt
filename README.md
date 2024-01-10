@@ -21,7 +21,7 @@ This is the official repo for PyTorch implementation of paper "SPoVT: Semantic-P
 
 ### Datasets 
 
-Download datasets from [here](https://drive.google.com/file/d/1l-XmkpYdJMzDyjs0mfzQKBImJ2K2NnTO/view?usp=sharing) and put datasets under folder `data/`.
+Download datasets from [here](https://drive.google.com/file/d/1Z-TNsEKLdqhqnYdWuTofJVFe4mANqAAA/view?usp=sharing) and put datasets under folder `data/`.
 
 ### Environment
 
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 
 ### Pretrained checkpoints (optional)
 
-Download pretrained model weights from [here](https://drive.google.com/file/d/1qzGVRT_vj_D7jJOVNap4iSnXZ3f-txwI/view?usp=sharing) for evaluation without training from scratch. Put checkpoint files under folder `ckpts/`.
+Download pretrained model weights from [here](https://drive.google.com/file/d/1GcZVGBJovIY34Z06XmJmu7-_-XqWrOG0/view?usp=sharing) for evaluation without training from scratch. Put checkpoint files under folder `ckpts/`.
 
 ## 🌱 Usage 
 
